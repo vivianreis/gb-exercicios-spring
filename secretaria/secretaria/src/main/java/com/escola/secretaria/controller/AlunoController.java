@@ -15,46 +15,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.escola.secretaria.model.Turma;
-import com.escola.secretaria.reposotory.TurmaRepository;
+import com.escola.secretaria.model.Aluno;
+import com.escola.secretaria.reposotory.AlunoRepository;
 
 @RestController
-@RequestMapping("/turma")
-@CrossOrigin("*")
-public class TurmaController {
+@RequestMapping("/aluno")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+public class AlunoController {
 	
 	@Autowired
-	private TurmaRepository repository;
+	private AlunoRepository repository;
 	
-	@GetMapping 
-	public ResponseEntity<List<Turma>> GetAll(){
+	@GetMapping
+	public ResponseEntity<List<Aluno>> getAll(){
 		return ResponseEntity.ok(repository.findAll());
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Turma> GetById(@PathVariable long id){
+	public ResponseEntity<Aluno> findById(@PathVariable long id){
 		return repository.findById(id)
-				.map(resp -> ResponseEntity.ok(resp))
-				.orElse(ResponseEntity.notFound().build());
+				.map(resp -> ResponseEntity.ok(resp)).orElse(ResponseEntity.notFound().build());
 	}
 	
-	@GetMapping ("/turma/{turma}")
-	public ResponseEntity<List<Turma>> GetByTitulo(@PathVariable String titulo){
-		return ResponseEntity.ok(repository.findAllByTurmaContainingIgnoreCase(titulo));
-	}
-		
 	@PostMapping
-	public ResponseEntity<Turma> post (@RequestBody Turma turma){
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(turma));
+	public ResponseEntity<Aluno> post (@RequestBody Aluno nome){
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(repository.save(nome));
 	}
 	
 	@PutMapping
-	public ResponseEntity<Turma> put (@RequestBody Turma turma){
-		return ResponseEntity.status(HttpStatus.OK).body(repository.save(turma));
+	public ResponseEntity<Aluno> put (@RequestBody Aluno nome){
+		return ResponseEntity.ok(repository.save(nome));
 	}
 	
-	@DeleteMapping("/{id}")
-	public void delete(@PathVariable long id) {
+	@DeleteMapping
+	public void delete (@PathVariable long id) {
 		repository.deleteById(id);
 	}
 }

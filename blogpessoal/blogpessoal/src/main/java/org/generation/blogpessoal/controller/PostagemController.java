@@ -1,7 +1,9 @@
-package com.escola.secretaria.controller;
+package org.generation.blogpessoal.controller;
 
 import java.util.List;
 
+import org.generation.blogpessoal.model.Postagem;
+import org.generation.blogpessoal.repository.PostagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,42 +17,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.escola.secretaria.model.Turma;
-import com.escola.secretaria.reposotory.TurmaRepository;
-
 @RestController
-@RequestMapping("/turma")
+@RequestMapping("/postagens")
 @CrossOrigin("*")
-public class TurmaController {
+public class PostagemController {
 	
 	@Autowired
-	private TurmaRepository repository;
+	private PostagemRepository repository;
 	
 	@GetMapping 
-	public ResponseEntity<List<Turma>> GetAll(){
+	public ResponseEntity<List<Postagem>> GetAll(){
 		return ResponseEntity.ok(repository.findAll());
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Turma> GetById(@PathVariable long id){
+	public ResponseEntity<Postagem> GetById(@PathVariable long id){
 		return repository.findById(id)
 				.map(resp -> ResponseEntity.ok(resp))
 				.orElse(ResponseEntity.notFound().build());
 	}
 	
-	@GetMapping ("/turma/{turma}")
-	public ResponseEntity<List<Turma>> GetByTitulo(@PathVariable String titulo){
-		return ResponseEntity.ok(repository.findAllByTurmaContainingIgnoreCase(titulo));
+	@GetMapping ("/titulo/{titulo}")
+	public ResponseEntity<List<Postagem>> GetByTitulo(@PathVariable String titulo){
+		return ResponseEntity.ok(repository.findAllByTituloContainingIgnoreCase(titulo));
 	}
 		
 	@PostMapping
-	public ResponseEntity<Turma> post (@RequestBody Turma turma){
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(turma));
+	public ResponseEntity<Postagem> post (@RequestBody Postagem postagem){
+		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(postagem));
 	}
 	
 	@PutMapping
-	public ResponseEntity<Turma> put (@RequestBody Turma turma){
-		return ResponseEntity.status(HttpStatus.OK).body(repository.save(turma));
+	public ResponseEntity<Postagem> put (@RequestBody Postagem postagem){
+		return ResponseEntity.status(HttpStatus.OK).body(repository.save(postagem));
 	}
 	
 	@DeleteMapping("/{id}")
